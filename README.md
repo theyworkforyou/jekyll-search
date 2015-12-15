@@ -1,3 +1,5 @@
+:warning: This gem is currently under heavy development and is not ready to be used in production.
+
 # Jekyll::Search
 
 Make it easy to search across collections on your Jekyll site.

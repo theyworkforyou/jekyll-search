@@ -68,7 +68,8 @@ module Jekyll
         collections_to_search = site.config.fetch('collections_to_search', 'posts')
         options = Array(collections_to_search).map do |collection, field|
           site.collections[collection].docs.map do |doc|
-            %Q(<option class="jekyll-search__option" value="#{doc.url}">#{doc.data['title']}</option>)
+
+            %Q(<option class="jekyll-search__option" value="#{doc.url}" data-alternative-spellings="#{AlternativeSpellings.for(collection.to_sym, doc).join(' ')}">#{doc.data['title']}</option>)
           end
         end
         [
@@ -85,5 +86,23 @@ module Jekyll
       end
     end
     ::Liquid::Template.register_tag('jekyll_search_box', SearchBoxTag)
+
+    class AlternativeSpellings
+      def self.spellings
+        @spellings ||= {}
+      end
+
+      def self.register(*collections, &block)
+        collections.each do |collection|
+          spellings[collection] = block
+        end
+      end
+
+      def self.for(collection, document)
+        block = spellings[collection]
+        return [] if block.nil?
+        block.call(document)
+      end
+    end
   end
 end

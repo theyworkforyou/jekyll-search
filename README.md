@@ -6,10 +6,12 @@ Make it easy to search across collections on your Jekyll site.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this to your application's Gemfile:
 
 ```ruby
-gem 'jekyll-search'
+group :jekyll_plugins do
+  gem 'jekyll-search'
+end
 ```
 
 And then execute:
@@ -22,7 +24,47 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Prerequisites
+
+First you'll need to make sure that you have jQuery and jQuery-UI already installed on the page as this plugin depends on those. 
+
+### Liquid tags
+
+Once you've got the prerequisites installed and on the page you'll need to add the following tag in the `<head>` tag of your site:
+
+```liquid
+{% jekyll_search_assets %}
+```
+
+Then add the following tag wherever you want the search box to appear:
+
+```liquid
+{% jekyll_search_box %}
+```
+
+## Configuration
+
+By default this plugin will index the `posts` collection. If you want it to index other collections you'll need to add a section to your `_config.yml`:
+
+```yaml
+collections_to_search:
+  - people
+  - organizations
+  - areas
+  - posts
+```
+
+This will then include the documents from all of those collections in the search.
+
+Sometimes you will have alternative names for things that will refer to the same thing. For example if you have a `person` document that has the `title` "James", you might also want to search for "Jim" and have it return the same document. You can configure other fields to be indexed by adding a ruby file into your site's `_plugins` directory containing something like this:
+
+```ruby
+Jekyll::Search::AlternativeSpellings.register :people do |person|
+  person.data['other_names'].map { |on| on['name'] }
+end
+```
+
+The `Jekyll::Search::Hooks.register` method takes a symbol which is the name of a collection and a block. The block is then passed each document for that collection and the block is expected to return an array of alternative spellings for this document.
 
 ## Development
 

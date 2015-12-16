@@ -20,9 +20,8 @@ class Jekyll::SearchTest < Minitest::Test
     tmpl = Liquid::Template.parse('{% jekyll_search_assets %}')
     tmpl.registers[:site] = site
     expected = <<-EXPECTED.chomp
-<link rel="stylesheet" href="/assets/jekyll-search/jquery-ui.css">
-<script src="/assets/jekyll-search/jquery-ui.min.js"></script>
 <script src="/assets/jekyll-search/jquery.select-to-autocomplete.js"></script>
+<script src="/assets/jekyll-search/main.js"></script>
     EXPECTED
     assert_equal expected, tmpl.render
   end

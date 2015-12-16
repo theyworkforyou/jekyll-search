@@ -54,6 +54,36 @@ module Jekyll
         out.sort.join("\n")
       end
     end
-    Liquid::Template.register_tag('jekyll_search_assets', AssetTag)
+    ::Liquid::Template.register_tag('jekyll_search_assets', AssetTag)
+
+    class SearchOptionsTag < ::Liquid::Tag
+      def render(context)
+        context.registers[:site].config['search_options'] ||= generate_search_options(context)
+      end
+
+      private
+
+      def generate_search_options(context)
+        site = context.registers[:site]
+        collections_to_search = site.config.fetch('collections_to_search', 'posts')
+        options = Array(collections_to_search).map do |collection, field|
+          site.collections[collection].docs.map do |doc|
+            %Q(<option class="jekyll-search__option" value="#{doc.url}">#{doc.data['title']}</option>)
+          end
+        end
+        [
+          '<option class="jekyll-search__option">Search</option>',
+          options
+        ].flatten.compact.join("\n")
+      end
+    end
+    ::Liquid::Template.register_tag('search_options', SearchOptionsTag)
+
+    class SearchBoxTag < ::Liquid::Tag
+      def render(context)
+        ::Liquid::Template.parse('<div class="jekyll-search"><select class="jekyll-search__select" data-jekyll-search>{% search_options %}</select></div>').render(context)
+      end
+    end
+    ::Liquid::Template.register_tag('jekyll_search_box', SearchBoxTag)
   end
 end

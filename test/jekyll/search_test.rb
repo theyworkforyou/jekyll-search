@@ -21,7 +21,6 @@ class Jekyll::SearchTest < Minitest::Test
     tmpl.registers[:site] = site
     expected = <<-EXPECTED.chomp
 <link rel="stylesheet" href="/assets/jekyll-search/jquery-ui.css">
-<script src="/assets/jekyll-search/jquery-1.11.1.min.js"></script>
 <script src="/assets/jekyll-search/jquery-ui.min.js"></script>
 <script src="/assets/jekyll-search/jquery.select-to-autocomplete.js"></script>
     EXPECTED

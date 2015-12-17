@@ -69,7 +69,7 @@ module Jekyll
         options = Array(collections_to_search).map do |collection, field|
           site.collections[collection].docs.map do |doc|
 
-            %Q(<option class="jekyll-search__option" value="#{doc.url}" data-alternative-spellings="#{AlternativeSpellings.for(collection.to_sym, doc).join(' ')}">#{doc.data['title']}</option>)
+            %Q(<option class="jekyll-search__option" value="#{doc.url}" data-alternative-spellings="#{AlternativeSpellings.for(collection.to_sym, doc).to_a.join(' ')}">#{doc.data['title']}</option>)
           end
         end
         [

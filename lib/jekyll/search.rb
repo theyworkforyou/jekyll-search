@@ -65,11 +65,12 @@ module Jekyll
 
       def generate_search_options(context)
         site = context.registers[:site]
+        baseurl = site.config['baseurl']
         collections_to_search = site.config.fetch('collections_to_search', 'posts')
         options = Array(collections_to_search).map do |collection, field|
           site.collections[collection].docs.map do |doc|
 
-            %Q(<option class="jekyll-search__option" value="#{doc.url}" data-alternative-spellings="#{AlternativeSpellings.for(collection.to_sym, doc).to_a.join(' ')}">#{doc.data['title']}</option>)
+            %Q(<option class="jekyll-search__option" value="#{[baseurl, doc.url].join}" data-alternative-spellings="#{AlternativeSpellings.for(collection.to_sym, doc).to_a.join(' ')}">#{doc.data['title']}</option>)
           end
         end
         [

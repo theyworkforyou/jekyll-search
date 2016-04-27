@@ -10,7 +10,7 @@ Add this to your application's Gemfile:
 
 ```ruby
 group :jekyll_plugins do
-  gem 'jekyll-search'
+  gem 'jekyll-search', git: 'https://github.com/theyworkforyou/jekyll-search.git', branch: 'master'
 end
 ```
 

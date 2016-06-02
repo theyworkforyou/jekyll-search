@@ -43,12 +43,13 @@ module Jekyll
       def render(context)
         site = context.registers[:site]
         baseurl = site.config['baseurl']
+        url = site.config['url']
         out = assets.map do |asset|
           path = File.join(assets_dir, asset)
           if asset.end_with?('css')
-            %Q{<link rel="stylesheet" href="#{baseurl}/#{path}">}
+            %Q{<link rel="stylesheet" href="#{url}#{baseurl}/#{path}">}
           elsif asset.end_with?('js')
-            %Q{<script src="#{baseurl}/#{path}"></script>}
+            %Q{<script src="#{url}#{baseurl}/#{path}"></script>}
           end
         end
         out.sort.join("\n")
@@ -65,11 +66,13 @@ module Jekyll
 
       def generate_search_options(context)
         site = context.registers[:site]
+        baseurl = site.config['baseurl']
+        url = site.config['url']
         collections_to_search = site.config.fetch('collections_to_search', 'posts')
         options = Array(collections_to_search).map do |collection, field|
           site.collections[collection].docs.map do |doc|
 
-            %Q(<option class="jekyll-search__option" value="#{doc.url}" data-alternative-spellings="#{AlternativeSpellings.for(collection.to_sym, doc).to_a.join(' ')}">#{doc.data['title']}</option>)
+            %Q(<option class="jekyll-search__option" value="#{[url, baseurl, doc.url].join}" data-alternative-spellings="#{AlternativeSpellings.for(collection.to_sym, doc).to_a.join(' ')}">#{doc.data['title']}</option>)
           end
         end
         [
